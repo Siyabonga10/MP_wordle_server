@@ -17,5 +17,15 @@ namespace MP_WORDLE_SERVER.MP_Game
             Games.Add(new Game(newGameId));
             return newGameId;
         }
+
+        public static Game? GetGame(int gameID)
+        {
+            foreach (Game game in Games)
+            {
+                if (game.GameID == gameID)
+                    return game;
+            }
+            return null;
+        }
     }
 }

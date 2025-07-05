@@ -4,10 +4,11 @@ namespace MP_WORDLE_SERVER.MP_Game
     public class Game(int gameID)
     {
         readonly private List<Player> Players = [];
-        public int GameId { get; } = gameID;
-        public void AddPlayer(string newPlayer)
+        public int GameID { get; } = gameID;
+        public void AddPlayer(string? newPlayer, bool isHost = false)
         {
-            Players.Add(new Player(newPlayer));
+            if(newPlayer != null)
+            Players.Add(new Player(newPlayer, isHost));
         }
         public void RemovePlayer(string targetPlayer)
         {

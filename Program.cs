@@ -1,41 +1,33 @@
+using MP_WORDLE_SERVER.MP_Game;
+
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
+app.Use(async (context, next) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
+    if (context.Items["Username"] != null)
+    {
+        var playerID = Random.Shared.Next(100000, 999999);
+        context.Items["Username"] = "User" + playerID;
+    }
+    await next();
+});
+app.MapGet("/NewGame", (HttpContext context) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    int gameID = GameManager.CreateNewGame();
+    GameManager.GetGame(gameID)?.AddPlayer((string?)context.Items["Username"], true);
+    return new { gameID };
+});
+
+app.MapGet("/Username", (HttpContext context) => {
+    return (string?)context.Items["Username"];
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
