@@ -3,7 +3,7 @@ namespace MP_WORDLE_SERVER.MP_Game
 {
     public class Game(int gameID)
     {
-        readonly private List<Player> Players = [];
+        public List<Player> Players { get; } = [];
         public int GameID { get; } = gameID;
         public void AddPlayer(string? newPlayer, bool isHost = false)
         {
