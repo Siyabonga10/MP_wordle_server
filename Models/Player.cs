@@ -1,10 +1,19 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace MP_WORDLE_SERVER.Models
 {
-    internal class Player(string username, bool ishost = false, bool inGame = true)
+    public class Player
     {
-        public String Username { get; } = username;
-        public bool IsHost { get; } = ishost;
-        public bool InGame { get; set; } = inGame;
-        public Game? CurrentGame { get; set; } = null;
+        public int Id { get; }
+        public string Username { get; }
+        public bool IsHost { get; }
+        public DateTime CreatedAt { get; }
+        public Player(string username, bool isHost)
+        {
+            Id = Id;
+            Username = username;
+            IsHost = isHost;
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 }
