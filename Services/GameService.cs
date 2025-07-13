@@ -40,5 +40,10 @@ namespace MP_WORDLE_SERVER.Services
             player.CurrentGame = targetGame;
             return true;
         }
+
+        public static Game? FindGame(int gameID)
+        {
+            return AllGames.Find(game => game.GameID == gameID);
+        }
     }
 }
