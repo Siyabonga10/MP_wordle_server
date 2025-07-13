@@ -37,6 +37,7 @@ namespace MP_WORDLE_SERVER.Services
                 return true; // Maybe I should return something different but the player is in there so idk
 
             targetGame.Players.Add(player);
+            player.CurrentGame = targetGame;
             return true;
         }
     }
