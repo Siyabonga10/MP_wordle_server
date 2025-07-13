@@ -22,16 +22,28 @@ namespace MP_WORDLE_SERVER.Models
         }
         public bool AddPlayer(Player newPlayer)
         {
-            if (_players.Count >= MAX_PLAYERS) return false;
             if (_players.Any(player => player.Username == newPlayer.Username)) return false;
 
             _players.Add(newPlayer);
             return true;
         }
 
+        public bool AddPlayer(string username, bool isHost)
+        {
+            if (_players.Any(player => player.Username == username)) return false;
+
+            _players.Add(new Player(username, isHost));
+            return true;
+        }   
+
         public bool HasPlayer(Player targetPlayer)
         {
             return _players.Any(player => player.Username == targetPlayer.Username);
+        }
+
+        public bool HasPlayer(string username)
+        {
+            return _players.Any(player => player.Username == username);
         }
     }
 }
