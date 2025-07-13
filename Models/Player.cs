@@ -10,6 +10,8 @@ namespace MP_WORDLE_SERVER.Models
         public DateTime CreatedAt { get; }
         public Player(string username, bool isHost)
         {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentException("Username cannot be null or empty", nameof(username));
             Id = Id;
             Username = username;
             IsHost = isHost;
