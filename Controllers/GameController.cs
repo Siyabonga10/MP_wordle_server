@@ -9,7 +9,7 @@ namespace MP_WORDLE_SERVER.Controllers
     [Route("api/[controller]")]
     internal class GameController : ControllerBase
     {
-        [HttpGet("(gameId)")]
+        [HttpGet("{gameId}")]
         public ActionResult<Game> GetGame(int gameId)
         {
             if (gameId <= 0)
@@ -25,7 +25,7 @@ namespace MP_WORDLE_SERVER.Controllers
             try
             {
                 var player = GetAuthenticatedUsername();
-                if (player.Value == null) return BadRequest("Player not authenticated");
+                if (player.Result == null || player.Value == null) return BadRequest("Player not authenticated");
                 var game = GameService.CreateGame(hostUsername: player.Value);
                 return CreatedAtAction(nameof(GetGame), new {gameId = game.Id}, game);
             }
@@ -45,7 +45,7 @@ namespace MP_WORDLE_SERVER.Controllers
                     return NotFound();
 
                 var player = GetAuthenticatedUsername();
-                if (player.Value == null) return BadRequest("Player not authenticated");
+                if (player.Result == null || player.Value == null) return BadRequest("Player not authenticated");
 
                 if (GameService.AddPlayerToGame(gameId, player.Value, isHost: false))
                     return NoContent();

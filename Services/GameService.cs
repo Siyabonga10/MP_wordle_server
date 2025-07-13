@@ -4,21 +4,18 @@ namespace MP_WORDLE_SERVER.Services
 {
     internal static class GameService
     {
-        readonly private static Random RNG;
+
         readonly private static List<Game> AllGames = [];
-        static GameService()
-        {
-            RNG = new Random();
-        }
 
         public static Game CreateGame(string hostUsername)
         {
-            int gameId = RNG.Next(10000, 99999);
+            int gameId = new Random().Next(1000, 9999);
             while (true)
             {
                 var matchingGame = AllGames.Find(game => game.Id == gameId);
                 if (matchingGame == null)
                     break;
+                gameId = new Random().Next(1000, 9999);
             }
 
             var newGame = new Game(gameId);
@@ -27,23 +24,25 @@ namespace MP_WORDLE_SERVER.Services
             return newGame;
         }
 
-        public static bool AddPlayerToGame(int gameID, string username, bool isHost)
+        public static bool AddPlayerToGame(int gameId, string username, bool isHost)
         {
-            var targetGame = AllGames.Find(game => game.Id == gameID);
+            var targetGame = AllGames.Find(game => game.Id == gameId);
             if (targetGame == null)
                 return false;
+
+            if (!CanJoinGame(gameId)) return false;
 
             // Check if the player is already in the game
             if (targetGame.HasPlayer(username))
                 return true; // Maybe I should return something different but the player is in there so idk
 
-            targetGame.AddPlayer(username, isHost: true);
+            targetGame.AddPlayer(username, isHost: isHost);
             return true;
         }
 
-        public static Game? FindGame(int gameID)
+        public static Game? FindGame(int gameId)
         {
-            return AllGames.Find(game => game.Id == gameID);
+            return AllGames.Find(game => game.Id == gameId);
         }
 
         private static bool CanJoinGame(int gameId)

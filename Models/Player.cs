@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace MP_WORDLE_SERVER.Models
 {
     public class Player
@@ -12,7 +10,7 @@ namespace MP_WORDLE_SERVER.Models
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username cannot be null or empty", nameof(username));
-            Id = Id;
+            Id = new Random().Next(1000, 9999);
             Username = username;
             IsHost = isHost;
             CreatedAt = DateTime.UtcNow;
